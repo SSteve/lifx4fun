@@ -7,7 +7,7 @@ var util = require("util");
 
 var loggingEnabled = 0;
 
-var bulbCount = 4;
+var bulbCount = 1;
 var colorWheelStep = 0x10000 / bulbCount;
 var step = 0x40;
 var bulbsFound = 0;
@@ -41,7 +41,8 @@ setColors = function() {
 
 startRedAndGreen = function() {
 	for (var i = 0; i < bulbsFound; i++) {
-		var currentHue = myBulbs[lx.bulbs[i].name].hue;
+		//###LHT - get from closure...
+		//var currentHue = myBulbs[lx.bulbs[i].name].hue;
 		var newHue = (i & 1) ? redHue : greenHue;
 		lx.lightsColour(newHue, saturation, luminance, whiteLevel, timing, lx.bulbs[i]);
 		conditionalLog("Bulb " + lx.bulbs[i].name + " hue set from 0x" + currentHue.toString(16) + " to 0x" + newHue.toString(16));
@@ -54,7 +55,9 @@ redAndGreen = function() {
 		if (Math.random() < blinkingOdds) {
 			//For some reason, hue isn't always what I set it to last. It's often off by 1 or 2. Until I figure out why, I'll
 			// just do this dumb test instead of fixing the problem. If it's closer to red than green, make it green and vice versa.
-			var currentHue = myBulbs[lx.bulbs[i].name].hue;
+			//###var currentHue = myBulbs[lx.bulbs[i].name].hue;
+			//###LHT - Get hue from correct location
+			var currentHue = myBulbs[lx.bulbs[i].name].state.hue;
 			var newHue = (currentHue < 0x2000 || currentHue > 0x6000) ? greenHue : redHue;
 			lx.lightsColour(newHue, saturation, luminance, whiteLevel, timing, lx.bulbs[i]);
 			conditionalLog("Bulb " + lx.bulbs[i].name + " hue set from 0x" + currentHue.toString(16) + " to 0x" + newHue.toString(16));
